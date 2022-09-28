@@ -36,8 +36,8 @@
   "homepage": "https://github.com/julusian/node-freetype2",
   "scripts": {
     "install": "pkg-prebuilds-verify ./binding-options.js || node-gyp rebuild",
-    "clean": "node-gyp clean",
-    "build": "node-gyp configure && node-gyp build",
+    "build": "node-gyp build",
+    "rebuild": "node-gyp clean configure build",
     "test": "jest"
   },
   "binary": {
