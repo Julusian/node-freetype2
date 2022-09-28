@@ -32,7 +32,7 @@
     "clean": "node-gyp clean",
     "build": "node-gyp configure && node-gyp build",
     "test": "jest",
-    "dev": "watch 'printf \"\\033[2J\\033[0f\" && pnpm build && pnpm test --watch' src spec"
+    "dev": "watch 'printf \"\\033[2J\\033[0f\" && yarn build && yarn test --watch' src spec"
   },
   "binary": {
     "napi_versions": [
@@ -40,23 +40,16 @@
     ]
   },
   "engines": {
-    "node": ">=12.17"
+    "node": ">=14.15"
   },
   "dependencies": {
-    "node-addon-api": "^5.0.0",
-    "node-gyp-build": "^4.5.0"
+    "node-addon-api": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^18.7.21",
     "ajv": "^8.11.0",
     "jest": "^29.0.3",
-    "prebuildify": "^5.0.1",
     "sharp": "^0.31.0",
     "ts-json-schema-generator": "^1.1.1"
-  },
-  "pnpm": {
-    "overrides": {
-      "lzma-native": "8.0.6"
-    }
   }
 }
