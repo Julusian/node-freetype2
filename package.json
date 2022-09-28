@@ -42,7 +42,7 @@
   },
   "binary": {
     "napi_versions": [
-      6
+      7
     ]
   },
   "engines": {
