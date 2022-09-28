@@ -68,7 +68,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 14.x
-          architecture: ${{ matrix.node-arch }}
 
       - name: rebuild
         if: ${{ !matrix.docker-arch }}
