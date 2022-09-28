@@ -20,19 +20,25 @@
     "truetype",
     "opentype"
   ],
-  "author": "Julian Waller, Amin Yahyaabadi",
+  "author": {
+    "name": "Julian Waller",
+    "email": "git@julusian.co.uk"
+  },
+  "contributors": [
+    {
+      "name": "Amin Yahyaabadi"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/julusian/node-freetype2/issues"
   },
   "homepage": "https://github.com/julusian/node-freetype2",
   "scripts": {
-    "install": "node-gyp-build",
-    "prebuild2": "prebuildify --napi --strip --tag-libc",
+    "install": "pkg-prebuilds-verify ./binding-options.js || node-gyp rebuild",
     "clean": "node-gyp clean",
     "build": "node-gyp configure && node-gyp build",
-    "test": "jest",
-    "dev": "watch 'printf \"\\033[2J\\033[0f\" && yarn build && yarn test --watch' src spec"
+    "test": "jest"
   },
   "binary": {
     "napi_versions": [
@@ -43,7 +49,8 @@
     "node": ">=14.15"
   },
   "dependencies": {
-    "node-addon-api": "^5.0.0"
+    "node-addon-api": "^5.0.0",
+    "pkg-prebuilds": "^0.1.0"
   },
   "devDependencies": {
     "@types/node": "^18.7.21",
