@@ -48,7 +48,7 @@ jobs:
             arch: arm
             is-native: false
             docker-arch: linux/arm/v7
-            docker-image: centos:7
+            docker-image: node:14-buster
           # linux-musl
           - os: ubuntu-latest
             arch: x64
@@ -111,14 +111,22 @@ jobs:
           # shell: bash
           options: --platform=${{ matrix.docker-arch }} -v ${{ github.workspace }}:/work -e CI=1 -e npm_config_build_from_source=1 -e NAPI_VERSION -e BINDING_NAME
           run: |
-            curl -sL https://rpm.nodesource.com/setup_16.x | bash -
-            yum install -y centos-release-scl
-            yum install -y devtoolset-11-gcc-c++ make git python3 nodejs fontconfig google-noto-sans-fonts
-            corepack enable
-            export PATH=/opt/rh/devtoolset-11/root/usr/bin:$PATH
+            if command -v apt-get &> /dev/null
+            then
+              apt-get update
+              apt-get install -y python3
+            elif command -v yum &> /dev/null
+            then
+              curl -sL https://rpm.nodesource.com/setup_16.x | bash -
+              yum install -y centos-release-scl
+              yum install -y devtoolset-11-gcc-c++ make git python3 nodejs fontconfig google-noto-sans-fonts
+              export PATH=/opt/rh/devtoolset-11/root/usr/bin:$PATH
+            fi
 
             cd /work
             
+            corepack enable
+
             yarn
             yarn test
             yarn pkg-prebuilds-copy --baseDir build/Release --source $BINDING_NAME.node --name=$BINDING_NAME --strip --napi_version=$NAPI_VERSION --arch=${{ matrix.arch }} --libc=${{ matrix.libc }}
