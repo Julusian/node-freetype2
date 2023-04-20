@@ -15,8 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     container: 
       image: ${{ matrix.container }}
-      options:
-        platform: ${{ matrix.platform }}
+      options: --platform ${{ matrix.platform }}
 
     strategy:
       fail-fast: false
@@ -41,6 +40,7 @@ jobs:
             arch: x64
             is-native: true
             container: centos:7 # TODO - use this for the others?
+            platform: linux/x64
           # linux-libc
           - os: ubuntu-latest
             arch: arm64
