@@ -13,9 +13,7 @@ jobs:
   build-and-test:
     name: Build ${{ matrix.arch }} on ${{ matrix.container || matrix.os }} ${{ matrix.libc }}
     runs-on: ${{ matrix.os }}
-    container: 
-      image: ${{ matrix.container }}
-      options: --platform ${{ matrix.platform }}
+    container: ${{ matrix.container }}
 
     strategy:
       fail-fast: false
@@ -40,27 +38,25 @@ jobs:
             arch: x64
             is-native: true
             container: centos:7 # TODO - use this for the others?
-            platform: linux/amd64
           # linux-libc
           - os: ubuntu-latest
             arch: arm64
             is-native: false
             # docker-arch: linux/arm64
             # docker-image: node:14-buster
-            container: centos:7 # TODO - use this for the others?
-            platform: linux/arm64
           # - os: ubuntu-latest
           #   arch: arm
           #   is-native: false
           #   docker-arch: linux/arm/v7
           #   docker-image: node:14-buster
-          # # linux-musl
-          # - os: ubuntu-latest
-          #   arch: x64
-          #   is-native: false
-          #   docker-arch: linux/amd64
-          #   docker-image: node:14-alpine
-          #   libc: musl
+          # linux-musl
+          - os: ubuntu-latest
+            arch: x64
+            is-native: false
+            # docker-arch: linux/amd64
+            container: node:16-alpine3.12
+            # docker-image: node:14-alpine
+            libc: musl
 
     steps:
       - name: Dependencies (Centos)
@@ -69,8 +65,11 @@ jobs:
           curl -sL https://rpm.nodesource.com/setup_16.x | bash -
           yum install -y centos-release-scl
           yum install -y devtoolset-11-gcc-c++ make git python3 nodejs fontconfig google-noto-sans-fonts
-          npm install -g yarn
+          corepack enable
           echo "/opt/rh/devtoolset-11/root/usr/bin" >> $GITHUB_PATH
+      - name: Dependencies (Linux musl)
+        if: contains(matrix.container, 'alpine')
+        run: apk add build-base git python3 font-noto --update-cache
 
       - uses: actions/checkout@v3
       - name: Checkout submodules
@@ -114,15 +113,15 @@ jobs:
           # shell: bash
           options: --platform=${{ matrix.docker-arch }} -v ${{ github.workspace }}:/work -e CI=1 -e npm_config_build_from_source=1 -e NAPI_VERSION -e BINDING_NAME
           run: |
-            if command -v apt-get &> /dev/null
-            then
-              apt-get update
-              apt-get install -y python3
-            elif command -v apk &> /dev/null
-            then
-              apk update
-              apk add make g++ gcc python3 git
-            fi
+            # if command -v apt-get &> /dev/null
+            # then
+            #   apt-get update
+            #   apt-get install -y python3
+            # elif command -v apk &> /dev/null
+            # then
+            #   apk update
+            #   apk add make g++ gcc python3 git
+            # fi
 
             cd /work
 
