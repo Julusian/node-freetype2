@@ -64,6 +64,7 @@ jobs:
           curl -sL https://rpm.nodesource.com/setup_16.x | bash -
           yum install -y centos-release-scl
           yum install -y devtoolset-11-gcc-c++ make git python3 nodejs fontconfig google-noto-sans-fonts
+          npm install -g yarn
           echo "/opt/rh/devtoolset-11/root/usr/bin" >> $GITHUB_PATH
 
       - uses: actions/checkout@v3
