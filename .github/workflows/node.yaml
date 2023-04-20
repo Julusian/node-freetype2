@@ -13,7 +13,10 @@ jobs:
   build-and-test:
     name: Build ${{ matrix.arch }} on ${{ matrix.container || matrix.os }} ${{ matrix.libc }}
     runs-on: ${{ matrix.os }}
-    container: ${{ matrix.container }}
+    container: 
+      image: ${{ matrix.container }}
+      options:
+        platform: ${{ matrix.platform }}
 
     strategy:
       fail-fast: false
@@ -38,12 +41,14 @@ jobs:
             arch: x64
             is-native: true
             container: centos:7 # TODO - use this for the others?
-          # # linux-libc
-          # - os: ubuntu-latest
-          #   arch: arm64
-          #   is-native: false
-          #   docker-arch: linux/arm64
-          #   docker-image: node:14-buster
+          # linux-libc
+          - os: ubuntu-latest
+            arch: arm64
+            is-native: false
+            # docker-arch: linux/arm64
+            # docker-image: node:14-buster
+            container: centos:7 # TODO - use this for the others?
+            platform: linux/arm64
           # - os: ubuntu-latest
           #   arch: arm
           #   is-native: false
@@ -68,13 +73,13 @@ jobs:
           echo "/opt/rh/devtoolset-11/root/usr/bin" >> $GITHUB_PATH
 
       - uses: actions/checkout@v3
-      # - name: Checkout submodules
-      #   shell: bash
-      #   run: |
-      #     # auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-      #     git submodule sync --recursive
-      #     git submodule update --init --force --recursive --depth=1
-      #     # git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+      - name: Checkout submodules
+        if: "!contains(matrix.container, 'centos')""
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
       - name: Use Node.js 16.x
         if: ${{ !matrix.docker-arch && !matrix.container }}
