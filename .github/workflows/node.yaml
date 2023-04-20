@@ -19,43 +19,43 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # windows
-          - os: windows-2019
-            arch: x64
-            is-native: true
-          - os: windows-2019
-            arch: ia32
-            is-native: false
-          # macos
-          - os: macos-11
-            arch: arm64
-            is-native: false
-          - os: macos-10.15
-            arch: x64
-            is-native: true
+          # # windows
+          # - os: windows-2019
+          #   arch: x64
+          #   is-native: true
+          # - os: windows-2019
+          #   arch: ia32
+          #   is-native: false
+          # # macos
+          # - os: macos-11
+          #   arch: arm64
+          #   is-native: false
+          # - os: macos-10.15
+          #   arch: x64
+          #   is-native: true
           # linux
           - os: ubuntu-latest
             arch: x64
             is-native: true
             container: centos:7 # TODO - use this for the others?
-          # linux-libc
-          - os: ubuntu-latest
-            arch: arm64
-            is-native: false
-            docker-arch: linux/arm64
-            docker-image: node:14-buster
-          - os: ubuntu-latest
-            arch: arm
-            is-native: false
-            docker-arch: linux/arm/v7
-            docker-image: node:14-buster
-          # linux-musl
-          - os: ubuntu-latest
-            arch: x64
-            is-native: false
-            docker-arch: linux/amd64
-            docker-image: node:14-alpine
-            libc: musl
+          # # linux-libc
+          # - os: ubuntu-latest
+          #   arch: arm64
+          #   is-native: false
+          #   docker-arch: linux/arm64
+          #   docker-image: node:14-buster
+          # - os: ubuntu-latest
+          #   arch: arm
+          #   is-native: false
+          #   docker-arch: linux/arm/v7
+          #   docker-image: node:14-buster
+          # # linux-musl
+          # - os: ubuntu-latest
+          #   arch: x64
+          #   is-native: false
+          #   docker-arch: linux/amd64
+          #   docker-image: node:14-alpine
+          #   libc: musl
 
     steps:
       - name: Dependencies (Centos)
@@ -67,12 +67,13 @@ jobs:
           echo "/opt/rh/devtoolset-11/root/usr/bin" >> $GITHUB_PATH
 
       - uses: actions/checkout@v3
-      - name: Checkout submodules
-        shell: bash
-        run: |
-          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          git submodule sync --recursive
-          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+        submodules: true
+      # - name: Checkout submodules
+      #   shell: bash
+      #   run: |
+      #     auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+      #     git submodule sync --recursive
+      #     git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
       - name: Use Node.js 16.x
         if: ${{ !matrix.docker-arch }}
