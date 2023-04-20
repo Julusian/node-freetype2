@@ -40,7 +40,7 @@ jobs:
             arch: x64
             is-native: true
             container: centos:7 # TODO - use this for the others?
-            platform: linux/x64
+            platform: linux/amd64
           # linux-libc
           - os: ubuntu-latest
             arch: arm64
