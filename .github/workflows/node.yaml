@@ -119,13 +119,16 @@ jobs:
             then
               curl -sL https://rpm.nodesource.com/setup_16.x | bash -
               yum install -y centos-release-scl
-              yum install -y devtoolset-11-gcc-c++ make git python3 nodejs fontconfig google-noto-sans-fonts
-              export PATH=/opt/rh/devtoolset-11/root/usr/bin:$PATH
+              yum install -y devtoolset-10-gcc-c++ make git python3 nodejs fontconfig google-noto-sans-fonts
+              export PATH=/opt/rh/devtoolset-10/root/usr/bin:$PATH
             fi
 
             cd /work
             
             corepack enable
+
+            # try and avoid timeout errors
+            yarn config set network-timeout 100000 -g
 
             yarn
             yarn test
