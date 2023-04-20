@@ -13,6 +13,7 @@ jobs:
   build-and-test:
     name: Build ${{ matrix.arch }} on ${{ matrix.container || matrix.os }} ${{ matrix.libc }}
     runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
 
     strategy:
       fail-fast: false
