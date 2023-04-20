@@ -11,7 +11,7 @@ env:
 
 jobs:
   build-and-test:
-    name: Build ${{ matrix.arch }} on ${{ matrix.os }} ${{ matrix.libc }}
+    name: Build ${{ matrix.arch }} on ${{ matrix.container || matrix.os }} ${{ matrix.libc }}
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -33,9 +33,10 @@ jobs:
             arch: x64
             is-native: true
           # linux
-          - os: ubuntu-18.04
+          - os: ubuntu-latest
             arch: x64
             is-native: true
+            container: centos:7 # TODO - use this for the others?
           # linux-libc
           - os: ubuntu-latest
             arch: arm64
@@ -64,7 +65,16 @@ jobs:
           git submodule sync --recursive
           git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
+      - name: Dependencies (Centos)
+        if: contains(matrix.container, 'centos')
+        run: |
+          curl -sL https://rpm.nodesource.com/setup_${{ matrix.nodejs_version }}.x | bash -
+          yum install -y centos-release-scl
+          yum install -y devtoolset-11-gcc-c++ make git python3 nodejs fontconfig google-noto-sans-fonts
+          echo "/opt/rh/devtoolset-11/root/usr/bin" >> $GITHUB_PATH
+
       - name: Use Node.js 14.x
+        if: ${{ !matrix.docker-arch }}
         uses: actions/setup-node@v3
         with:
           node-version: 14.x
