@@ -67,7 +67,8 @@ jobs:
           echo "/opt/rh/devtoolset-11/root/usr/bin" >> $GITHUB_PATH
 
       - uses: actions/checkout@v3
-        submodules: true
+        with:
+          submodules: true
       # - name: Checkout submodules
       #   shell: bash
       #   run: |
