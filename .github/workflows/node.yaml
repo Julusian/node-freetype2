@@ -47,7 +47,7 @@ jobs:
           - os: ubuntu-24.04-arm
             arch: arm64
             is-native: true
-            docker-image: rockylinux/rockylinux:8
+            container: rockylinux/rockylinux:8
           - os: ubuntu-24.04-arm
             arch: arm
             is-native: false
