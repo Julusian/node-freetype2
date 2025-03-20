@@ -32,10 +32,10 @@ jobs:
             is-native: false
             node-version: 20.x # 18.x is missing the arm64 node.lib
           # macos
-          - os: macos-12
+          - os: macos-13
             arch: arm64
             is-native: false
-          - os: macos-12
+          - os: macos-13
             arch: x64
             is-native: true
           # linux
@@ -44,12 +44,11 @@ jobs:
             is-native: true
             container: rockylinux/rockylinux:8
           # linux-arm
-          - os: ubuntu-latest
+          - os: ubuntu-24.04-arm
             arch: arm64
-            is-native: false
-            docker-arch: linux/arm64
+            is-native: true
             docker-image: rockylinux/rockylinux:8
-          - os: ubuntu-latest
+          - os: ubuntu-24.04-arm
             arch: arm
             is-native: false
             docker-arch: linux/arm/v7
