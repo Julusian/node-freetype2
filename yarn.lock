@@ -727,6 +727,7 @@ __metadata:
     ajv: "npm:^8.17.1"
     jest: "npm:^29.7.0"
     node-addon-api: "npm:^6.1.0"
+    node-gyp: "npm:^12.2.0"
     pkg-prebuilds: "npm:^1.0.0"
     sharp: "npm:^0.32.6"
     ts-json-schema-generator: "npm:^1.5.1"
@@ -2880,7 +2881,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-gyp@npm:latest":
+"node-gyp@npm:^12.2.0, node-gyp@npm:latest":
   version: 12.2.0
   resolution: "node-gyp@npm:12.2.0"
   dependencies:
