@@ -84,15 +84,15 @@ jobs:
 
           yarn
 
+          npm_config_build_from_source=true yarn run rebuild --arch=${{ matrix.arch }}
+
           if [ -n "${{ matrix.is-native }}" ]; then
             yarn test
           fi
 
-          yarn run rebuild --arch=${{ matrix.arch }}
           yarn pkg-prebuilds-copy --baseDir build/Release --source $BINDING_NAME.node --name=$BINDING_NAME --strip --napi_version=$NAPI_VERSION --arch=${{ matrix.arch }} --libc=${{ matrix.libc }}
         env:
           CI: true
-          npm_config_build_from_source: true
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -114,7 +114,7 @@ jobs:
         with:
           image: ${{ matrix.docker-image }}
           # shell: bash
-          options: --platform=${{ matrix.docker-arch }} -v ${{ github.workspace }}:/work -e CI=1 -e npm_config_build_from_source=1 -e NAPI_VERSION -e BINDING_NAME
+          options: --platform=${{ matrix.docker-arch }} -v ${{ github.workspace }}:/work -e CI=1 -e NAPI_VERSION -e BINDING_NAME
           run: |
             if command -v apt-get &> /dev/null
             then
