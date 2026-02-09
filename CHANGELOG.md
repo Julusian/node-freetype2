@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/Julusian/node-freetype2/compare/v1.3.0...v1.3.1) (2026-02-09)
+
+
+### Bug Fixes
+
+* repository url ([c3b5f0c](https://github.com/Julusian/node-freetype2/commit/c3b5f0cce9081ce32b13f22a425fccc3a1cf7514))
+
 ## [1.3.0](https://github.com/Julusian/node-freetype2/compare/v1.2.1...v1.3.0) (2026-02-09)
 
 
