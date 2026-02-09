@@ -15,9 +15,8 @@ permissions:
 
 jobs:
   build-and-test:
-    name: Build ${{ matrix.docker-arch || matrix.arch }} on ${{ matrix.docker-image || matrix.container || matrix.os }} ${{ matrix.libc }}
+    name: Build ${{ matrix.docker-arch || matrix.arch }} on ${{ matrix.docker-image || matrix.os }} ${{ matrix.libc }}
     runs-on: ${{ matrix.os }}
-    container: ${{ matrix.container }}
 
     strategy:
       fail-fast: false
@@ -30,57 +29,49 @@ jobs:
           - os: windows-2022
             arch: ia32
             is-native: false
-          - os: windows-2022
+          - os: windows-11-arm
             arch: arm64
-            is-native: false
+            is-native: true
             node-version: 20.x # 18.x is missing the arm64 node.lib
           # macos
-          - os: macos-13
+          - os: macos-latest
             arch: arm64
-            is-native: false
-          - os: macos-13
-            arch: x64
             is-native: true
+          - os: macos-latest
+            arch: x64
+            is-native: false
           # linux
           - os: ubuntu-latest
             arch: x64
             is-native: true
-            container: rockylinux/rockylinux:8
-          # linux-arm
+            docker-arch: linux/amd64
+            docker-image: node:22-bullseye
+          # linux-libc
           - os: ubuntu-24.04-arm
             arch: arm64
             is-native: true
-            container: rockylinux/rockylinux:8
+            docker-arch: linux/arm64
+            docker-image: node:22-bullseye
           - os: ubuntu-24.04-arm
             arch: arm
             is-native: false
             docker-arch: linux/arm/v7
-            docker-image: node:18-buster
+            docker-image: node:22-bullseye
           # linux-musl
           - os: ubuntu-latest
             arch: x64
-            is-native: true
-            container: node:18-alpine3.18
+            is-native: false
+            docker-arch: linux/amd64
+            docker-image: node:22-alpine
             libc: musl
 
     steps:
-      - name: Dependencies (rockylinux)
-        if: contains(matrix.container, 'rockylinux')
-        run: |
-          curl -sL https://rpm.nodesource.com/setup_18.x | bash -
-          dnf install -y gcc-toolset-11-toolchain make git python3 nodejs fontconfig google-noto-sans-fonts
-          corepack enable
-          echo "/opt/rh/gcc-toolset-11/root/usr/bin" >> $GITHUB_PATH
-      - name: Dependencies (Linux musl)
-        if: contains(matrix.container, 'alpine')
-        run: apk add build-base git python3 font-noto bash --update-cache
-
       - uses: actions/checkout@v6
         with:
           submodules: recursive
 
       - name: Setup Node.js
-        if: ${{ !matrix.docker-arch && !matrix.container }}
+        if: ${{ !matrix.docker-arch }}
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version || '18.x' }}
