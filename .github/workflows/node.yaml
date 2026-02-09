@@ -86,7 +86,7 @@ jobs:
 
           npm_config_build_from_source=true yarn run rebuild --arch=${{ matrix.arch }}
 
-          if [ -n "${{ matrix.is-native }}" ]; then
+          if [ "${{ matrix.is-native }}" == "true" ]; then
             yarn test
           fi
 
@@ -123,7 +123,7 @@ jobs:
             elif command -v apk &> /dev/null
             then
               apk update
-              apk add python3
+              apk add python3 make g++
             elif command -v yum &> /dev/null
             then
               curl -sL https://rpm.nodesource.com/setup_18.x | bash -
